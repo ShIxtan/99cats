@@ -1,0 +1,47 @@
+<% if flash[:notice] %>
+  <div class="notice"><%= flash[:notice] %></div>
+<% end %>
+
+<table style="width:500px; text-align: center">
+  <tr>
+    <th>Name</th>
+    <th>Sex</th>
+    <th>Age</th>
+    <th>Color</th>
+    <th>Fondest Memories</th>
+  </tr>
+  <tr>
+    <td><%= @cat.name %></td>
+    <td><%= @cat.sex %></td>
+    <td><%= @cat.age %></td>
+    <td><%= @cat.color %></td>
+    <td><%= @cat.description %></td>
+  </tr>
+</table>
+<br>
+
+ <%# add list of requests %>
+ <table style="width:500px; text-align: center">
+   <tr>
+     <th>Start Date</th>
+     <th>End Date</th>
+     <th>Status</th>
+     <th>Approve</th>
+     <th>Deny</th>
+   </tr>
+   <% @requests.each do |request| %>
+   <tr>
+     <td><%= request.start_date %></td>
+     <td><%= request.end_date %></td>
+     <td><%= request.status %></td>
+     <td><%= button_to "Approve", approve_url(request) if !request.approved? %></td>
+     <td><%= button_to "Deny", deny_url(request) if !request.denied? %></td>
+   </tr>
+   <% end %>
+ </table>
+<br>
+
+
+<%= link_to "Edit", edit_cat_url(@cat) %>
+
+<%= link_to "All Cats", cats_url %>
