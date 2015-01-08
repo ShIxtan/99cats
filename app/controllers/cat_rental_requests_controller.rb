@@ -1,5 +1,6 @@
 class CatRentalRequestsController < ApplicationController
   before_action :check_owner, only: [:approve, :deny]
+  before_action :check_renter, only: [:update, :edit]
   before_action :logged_in
 
   def index
@@ -67,8 +68,17 @@ class CatRentalRequestsController < ApplicationController
 
   def check_owner
     cat = CatRentalRequest.find(params[:id]).cat
+
     if current_user.id != cat.user_id
       redirect_to cat_url(cat)
+    end
+  end
+
+
+  def check_renter
+    rental = CatRentalRequest.find(params[:id])
+    if current_user.id != rental.user_id
+      redirect_to cats_url
     end
   end
 end

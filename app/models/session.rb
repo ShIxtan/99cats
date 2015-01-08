@@ -12,4 +12,16 @@
 class Session < ActiveRecord::Base
   validates :user_id, :token, presence: true
   validates :token, uniqueness: true
+  after_initialize :ensure_token
+
+  belongs_to :user
+
+  def self.generate_token
+    SecureRandom::urlsafe_base64(16)
+  end
+
+  def ensure_token
+    self.token ||= self.class.generate_token
+  end
+
 end

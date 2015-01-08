@@ -1,0 +1,19 @@
+<h1> All your sessions</h1>
+
+<ul>
+   <% unless @sessions.nil? %>
+    <% @sessions.each do |session|  %>
+    <li>
+      id: <%= session.id %>
+    </li>
+    <li>
+      Created at: <%= session.created_at %>
+    </li>
+    <li>
+    <%= button_to "Log out this session",
+    session_url, method: :delete,
+    params: {session: session.id} %>    
+    </li>
+    <% end %>
+  <% end %>
+</ul>

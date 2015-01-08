@@ -22,9 +22,19 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    current_user.reset_session_token!
-    session[:session_token] = nil
-    redirect_to cats_url
+    if params[:session]
+      Session.find(params[:session]).destroy!
+      render :index
+    else
+      Session.find_by(token: session[:session_token]).destroy!
+      session[:session_token] = nil
+      redirect_to new_session_url
+    end
+  end
+
+  def index
+    @sessions = Session.where(user_id: params[:user_id])
+    render :index
   end
 
   private

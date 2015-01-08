@@ -4,19 +4,19 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :current_user
 
-  def login!(user)
-    @current_user = user
-    session[:session_token] = user.session_token
-  end
-
   def current_user
-    return nil if session[:session_token].nil?
-
-    @current_user ||= User.find_by_session_token(session[:session_token])
+    return nil if Session.find_by(token: session[:session_token]).nil?
+  
+    @current_user ||= Session.find_by(token: session[:session_token]).user
   end
 
   def logged_in
     redirect_to new_session_url unless current_user
+  end
+
+  def login!(user)
+    our_sesh = Session.create!(user_id: user.id)
+    session[:session_token] = our_sesh.token
   end
 
 end
