@@ -26,6 +26,7 @@
      <th>Start Date</th>
      <th>End Date</th>
      <th>Status</th>
+     <th>User Name</th>
      <th>Approve</th>
      <th>Deny</th>
    </tr>
@@ -34,8 +35,11 @@
      <td><%= request.start_date %></td>
      <td><%= request.end_date %></td>
      <td><%= request.status %></td>
-     <td><%= button_to "Approve", approve_url(request) if !request.approved? %></td>
-     <td><%= button_to "Deny", deny_url(request) if !request.denied? %></td>
+     <td><%= request.user.user_name %></td>
+     <% if @cat.is_owner?(current_user) %>
+       <td><%= button_to "Approve", approve_url(request) if !request.approved? %></td>
+       <td><%= button_to "Deny", deny_url(request) if !request.denied? %></td>
+      <% end %>
    </tr>
    <% end %>
  </table>

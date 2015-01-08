@@ -1,8 +1,4 @@
-<% if flash[:errors] %>
-  <% flash[:errors].each do |error| %>
-    <div style="font-size:12px;color:red"class="error"><%= error %></div>
-  <% end %>
-<% end %>
+
 
 <% if @cat_rental_request.persisted? %>
   <% url = cat_rental_request_url(@cat_rental_request) %>
@@ -11,6 +7,7 @@
 <% end %>
 
 <form action=<%=url %> method="post">
+  <%= render 'layouts/auth_token' %>
   <input type="hidden" name="_method" value=<%= "PATCH" if @cat_rental_request.persisted? %>>
 
   <label for="cat">Cat Name</label>

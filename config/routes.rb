@@ -9,4 +9,6 @@ Rails.application.routes.draw do
   post '/cat_rental_requests/:id/approve' => 'cat_rental_requests#approve', as: :approve
   post '/cat_rental_requests/:id/deny' => 'cat_rental_requests#deny', as: :deny
 
+  resources :users, only: [:create, :new, :show]
+  resource :session, only: [:create, :new, :destroy]
 end

@@ -9,16 +9,18 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  status     :string           not null
+#  user_id    :integer          not null
 #
 
 class CatRentalRequest < ActiveRecord::Base
-  validates :cat_id, :start_date, :end_date, :status, presence: true
+  validates :cat_id, :start_date, :end_date, :status, :user_id, presence: true
   validates :status, inclusion: { in: %w(PENDING APPROVED DENIED),
     message: "%{value} is not a valid status" }
   after_initialize :set_default_status
   validate :overlapping_approved_requests?
 
   belongs_to :cat, dependent: :destroy
+  belongs_to :user
 
   def approved?
     status == "APPROVED"
@@ -29,7 +31,7 @@ class CatRentalRequest < ActiveRecord::Base
   end
 
   def overlapping_approved_requests?
-    unless overlapping_approved_requests.empty? || status != "APPROVED" 
+    unless overlapping_approved_requests.empty? || status != "APPROVED"
       errors[:status] << "This cat is already requested during these dates"
     end
   end
@@ -41,7 +43,6 @@ class CatRentalRequest < ActiveRecord::Base
         request.deny!
       end
       self.save!
-      p self
     end
   end
 

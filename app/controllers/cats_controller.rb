@@ -1,4 +1,7 @@
 class CatsController < ApplicationController
+  before_action :check_ownership, only: [:edit, :update]
+  before_action :logged_in
+
   def index
     @cats = Cat.all
 
@@ -18,6 +21,7 @@ class CatsController < ApplicationController
 
   def create
     @cat = Cat.new(cat_params)
+    @cat.user_id = current_user.id
 
     if @cat.save
       flash[:notice] = "Cat successfully created"
@@ -48,5 +52,11 @@ class CatsController < ApplicationController
   private
   def cat_params
     params.require(:cat).permit(:name, :birth_date, :sex, :color, :description)
+  end
+
+  def check_ownership
+    if current_user.id != Cat.find(params[:id]).user_id
+      redirect_to cats_url
+    end
   end
 end
